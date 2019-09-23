@@ -2,10 +2,7 @@
 
 import express from 'express'
 import bodyParser from 'body-parser'
-import { clientRouter } from './controllers/ClientController'
-import { productRouter } from './controllers/ProductController'
-import { listRouter } from './controllers/ListController'
-import { purchaseRouter } from './controllers/PurchaseController'
+import { userRouter } from './controllers/UserController'
 import mongoose from 'mongoose';
 
 mongoose.Promise = global.Promise;
@@ -21,10 +18,7 @@ const app = express()
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
-app.use('/clients', clientRouter)
-app.use('/products', productRouter)
-app.use('/lists', listRouter)
-app.use('/purchases', purchaseRouter)
+app.use('/users', userRouter)
 
 
 
