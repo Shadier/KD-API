@@ -6,7 +6,7 @@ import { userRouter } from './controllers/UserController'
 import mongoose from 'mongoose';
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/tienda', { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost:27017/KitchenDuty', { useNewUrlParser: true })
 		.then(() => {
 			console.log('conected to database successfully!')
 		})

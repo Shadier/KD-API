@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const Schema = mongoose_1.default.Schema;
-const User = require('./user').schema;
 const UserSchema = Schema({
     name: String,
     lastname: String,
@@ -13,11 +12,13 @@ const UserSchema = Schema({
     password: String,
     role: Number,
     userIA: Boolean,
-    monday: Boolean,
-    tuesday: Boolean,
-    wednesday: Boolean,
-    thursday: Boolean,
-    friday: Boolean,
+    remoteDays: {
+        monday: Boolean,
+        tuesday: Boolean,
+        wednesday: Boolean,
+        thursday: Boolean,
+        friday: Boolean
+    },
     last_partner: this,
     last_day: Number,
 });

@@ -8,7 +8,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const UserController_1 = require("./controllers/UserController");
 const mongoose_1 = __importDefault(require("mongoose"));
 mongoose_1.default.Promise = global.Promise;
-mongoose_1.default.connect('mongodb://localhost:27017/tienda', { useNewUrlParser: true })
+mongoose_1.default.connect('mongodb://localhost:27017/KitchenDuty', { useNewUrlParser: true })
     .then(() => {
     console.log('conected to database successfully!');
 })
