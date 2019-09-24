@@ -7,7 +7,9 @@ codeRouter.get('/', (req, res) => {
 	Code.find((err, code) =>{
 		if(err) return res.status(500).send({message: 'Internal Server error'})
 		else if(!code) return res.status(404).send({message: 'code not founded!'})
-        else if(code == null) {
+        else if(code && code.length > 0) return res.status(200).send({currentcode: code[0].codeWeek})
+        else {
+            console.log("ab")
             let code = new Code();
             code.codeWeek = "X03D-N3ID"
             code.save((err, codeStored) => {
@@ -16,7 +18,6 @@ codeRouter.get('/', (req, res) => {
                 else return res.status(404).send({message: 'code not updated!'})
             })
         }
-        else return res.status(200).send({currentcode: code[0].codeWeek})
 	})
 })
 
@@ -49,4 +50,24 @@ codeRouter.post('/', (req, res) => {
             }
         }
     })
+})
+
+codeRouter.post('/check/', (req, res) => {
+    const params = req.body;
+    if (params.codeWeek) {
+        Code.find((err, code) =>{
+            if(err) return res.status(500).send({message: 'Internal Server error'})
+            else if(!code) return res.status(404).send({message: 'code not founded!'})
+            else if(code && code.length > 0) {
+                if(code[0].codeWeek == params.codeWeek) return res.status(200).send({success: "code is correct"})
+                else return res.status(200).send({error: "that code is incorrect!"})
+            }
+            else return res.status(404).send({message: 'There are no codes registered!'})
+        })
+        
+        
+    } else {
+        res.status(400).send({message: 'Send all data please'})
+    }
+        
 })
