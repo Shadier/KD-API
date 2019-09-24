@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const Schema = mongoose_1.default.Schema;
+const Report = require('./report').schema;
 const UserSchema = Schema({
     name: String,
     lastname: String,
@@ -21,6 +22,7 @@ const UserSchema = Schema({
     },
     last_partner: this,
     last_day: Number,
+    report: Report
 });
 module.exports = mongoose_1.default.model('User', UserSchema);
 //# sourceMappingURL=user.js.map

@@ -3,6 +3,8 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import { userRouter } from './controllers/UserController'
+import { calendarRouter } from './controllers/CalendarController'
+import { tagteamRouter } from './controllers/TagTeamController'
 import mongoose from 'mongoose';
 
 mongoose.Promise = global.Promise;
@@ -19,6 +21,8 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
 app.use('/users', userRouter)
+app.use('/calendars', calendarRouter)
+app.use('/tagteams', tagteamRouter)
 
 
 

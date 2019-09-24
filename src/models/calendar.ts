@@ -8,7 +8,6 @@ const TagTeam = require('./tagteam').schema
 const CalendarSchema = Schema({
 	month: Number,
 	year: Number,
-	code: String,
 	distribution: [TagTeam]
 });
 
