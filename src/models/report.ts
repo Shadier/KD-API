@@ -6,6 +6,7 @@ const Schema = mongoose.Schema;
 const Item  = require('./item').schema
 
 const ReportSchema = Schema({
+    userId: String,
     comment: String,
     qualification: Number,
     reportedAt: Date,

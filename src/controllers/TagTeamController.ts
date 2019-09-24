@@ -1,7 +1,9 @@
 import { Router } from 'express'
 const TagTeam  = require('../models/tagteam')
+const User  = require('../models/user')
 
 export const tagteamRouter = Router()
+
 tagteamRouter.get('/', (req, res) => {
 	TagTeam.find((err, tagteams) =>{
 		if(err) return res.status(500).send({message: 'Internal Server error'})
@@ -16,6 +18,111 @@ tagteamRouter.get('/:id', (req, res) => {
 	TagTeam.findById(tagteamId, (err, tagteam) =>{
 		if(err) return res.status(500).send({message: 'Internal Server error'})
 		if(!tagteam) return res.status(404).send({message: 'tagteam not founded!'})
-		return res.status(200).send({tagteam})
+        else{
+            let userMorning
+            let userAfternoon
+            User.findOne({_id: tagteam.userMorning}, (err, user) => {
+                if(err) return res.status(500).send({message: 'Internal Server error, userMorning doesn´t finded'})
+                if(!user) return res.status(404).send({message: 'user not finded!'})
+                else {
+                    userMorning = user; 
+                    User.findOne({_id: tagteam.userAfternoon}, (err, user) => {
+                        if(err) return res.status(500).send({message: 'Internal Server error, userMorning doesn´t finded'})
+                        if(!user) return res.status(404).send({message: 'user not finded!'})
+                        else {
+                            userAfternoon = user; 
+                            return res.status(200).send({date: tagteam.date, userMorning, userAfternoon})
+                        }
+                    })
+                }
+            })
+            
+        }
 	})
+})
+
+tagteamRouter.get('/date/:dateToSearch', (req, res) => {
+    const dateToSearch = new Date(req.params.dateToSearch);
+    
+	TagTeam.findOne({date: dateToSearch}, (err, tagteam) =>{
+		if(err) return res.status(500).send({message: 'Internal Server error'})
+		if(!tagteam) return res.status(404).send({message: 'tagteam not founded!'})
+        else{
+            let userMorning
+            let userAfternoon
+            User.findOne({_id: tagteam.userMorning}, (err, user) => {
+                if(err) return res.status(500).send({message: 'Internal Server error, userMorning doesn´t finded'})
+                if(!user) return res.status(404).send({message: 'user not finded!'})
+                else {
+                    userMorning = user; 
+                    User.findOne({_id: tagteam.userAfternoon}, (err, user) => {
+                        if(err) return res.status(500).send({message: 'Internal Server error, userMorning doesn´t finded'})
+                        if(!user) return res.status(404).send({message: 'user not finded!'})
+                        else {
+                            userAfternoon = user; 
+                            return res.status(200).send({date: tagteam.date, userMorning, userAfternoon})
+                        }
+                    })
+                }
+            })
+            
+        }
+	})
+})
+
+tagteamRouter.get('/date/:dateStart/:dateEnd', (req, res) => {
+    const dateStart = new Date(req.params.dateStart);
+    const dateEnd = new Date(req.params.dateEnd);
+    
+	TagTeam.find({date: {"$gte": dateStart, "$lte":dateEnd}}, (err, tagteams) =>{
+		if(err) return res.status(500).send({message: 'Internal Server error'})
+		if(!tagteams) return res.status(404).send({message: 'tagteams not founded!'})
+        else return res.status(200).send({tagteams})
+	})
+})
+
+tagteamRouter.delete('/:id', (req, res) => {
+	const tagteamId = req.params.id;
+	TagTeam.findByIdAndRemove(tagteamId, (err, tagteamDeleted) => {
+		if(err) return res.status(500).send({message: 'Internal Server error, tagteam doesn´t Deleted'})
+		if(tagteamDeleted) res.status(200).send({message: 'tagteam Deleted successfully!'})
+		else res.status(404).send({message: 'tagteam not Deleted!'})
+	})
+})
+
+tagteamRouter.delete('/date/:assign', (req, res) => {
+	const assign = req.params.assign;
+	TagTeam.findAndRemove({date: assign}, (err, tagteamDeleted) => {
+		if(err) return res.status(500).send({message: 'Internal Server error, tagteam doesn´t Deleted'})
+		if(tagteamDeleted) res.status(200).send({messafe: 'tagteam Deleted successfully!'})
+		else res.status(404).send({message: 'tagteam not Deleted!'})
+	})
+})
+
+tagteamRouter.delete('/date/:start/:end', (req, res) => {
+	const start = new Date(req.params.start);
+	const end = new Date(req.params.end);
+	TagTeam.deleteMany({date: {"$gte": start, "$lte": end}}, (err, tagteamDeleted) => {
+		if(err) return res.status(500).send({message: 'Internal Server error, tagteam doesn´t Deleted'})
+		if(tagteamDeleted) res.status(200).send({messafe: 'tagteam Deleted successfully!'})
+		else res.status(404).send({message: 'tagteam not Deleted!'})
+	})
+})
+
+tagteamRouter.post('/', (req, res) => {
+	const params = req.body;
+	let tagteam = new TagTeam();
+
+	if (params.userMorning && params.userAfternoon && params.date) {
+        tagteam.date = params.date
+        tagteam.userMorning = params.userMorning
+        tagteam.userAfternoon = params.userAfternoon
+        tagteam.save((err, tagteam) => {
+            if(err) return res.status(500).send({message: 'Internal Server error, tagteam doesn´t saved', err})
+            if(tagteam) res.status(200).send({tagteam})
+            else res.status(404).send({message: 'tagteam not saved!'})
+		})
+	} else {
+		res.status(400).send({message: 'Send all data please'})
+	}
 })

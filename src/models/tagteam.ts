@@ -3,12 +3,12 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
-const User  = require('./user').schema
+const Report  = require('./report').schema
 
 const TagteamSchema = Schema({
-	dayNumber: Number,
-	usrMorning: User,
-	usrAfternoon: User,
+	date: Date,
+	userMorning: String,
+	userAfternoon: String,
 });
 
 module.exports = mongoose.model('Tagteam', TagteamSchema);

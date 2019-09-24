@@ -9,6 +9,15 @@ userRouter.get('/', (req, res) => {
 		return res.status(200).send({users})
 	})
 })
+userRouter.get('/:id', (req, res) => {
+	const userId = req.params.id;
+
+	elUsuario.findById(userId, (err, user) =>{
+		if(err) return res.status(500).send({message: 'Internal Server error'})
+		if(!user) return res.status(404).send({message: 'user not founded!'})
+		return res.status(200).send({user})
+	})
+})
 
 
 userRouter.post('/create',(req,res)=>{
