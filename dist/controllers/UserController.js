@@ -14,18 +14,20 @@ exports.userRouter.get('/', (req, res) => {
 });
 exports.userRouter.get('/:id', (req, res) => {
     const userId = req.params.id;
-    elUsuario.findById(userId, (err, user) => {
-        if (err)
-            return res.status(500).send({ message: 'Internal Server error' });
-        if (!user)
-            return res.status(404).send({ message: 'user not founded!' });
-        return res.status(200).send({ user });
-    });
+    if (req.params.id != null) {
+        elUsuario.findById(userId, (err, user) => {
+            if (err)
+                return res.status(500).send({ message: 'Internal Server error' });
+            if (!user)
+                return res.status(404).send({ message: 'user not founded!' });
+            return res.status(200).send({ user });
+        });
+    }
 });
 exports.userRouter.post('/create', (req, res) => {
     const params = req.body;
-    console.log(params);
     let usuario = new elUsuario();
+    let idpartner = params.last_partner;
     usuario.name = params.name;
     usuario.lastname = params.lastname;
     usuario.email = params.email;
@@ -35,7 +37,16 @@ exports.userRouter.post('/create', (req, res) => {
     usuario.remoteDays = params.remoteDays;
     usuario.last_day = params.last_day;
     usuario.report = params.report;
-    usuario.last_partner = params.last_partner;
+    //usuario.last_partner=params.last_partner;
+    elUsuario.findById(idpartner, (err, result) => {
+        console.log(result);
+        if (err)
+            return res.status(500).send({ message: 'Error interno' });
+        if (result)
+            usuario.last_partner = result;
+        else
+            usuario.last_partner = null;
+    });
     usuario.save((err, usrsave) => {
         console.log({ usrsave });
         console.log(err);
@@ -44,7 +55,20 @@ exports.userRouter.post('/create', (req, res) => {
         if (usrsave)
             res.status(200).send({ client: usrsave });
         else
-            res.status(404).send({ message: 'Actor not saved!' });
+            res.status(404).send({ message: 'Usuario not saved!' });
+    });
+});
+exports.userRouter.patch('/update', (req, result) => {
+    const params = req.body;
+    const leId = params.id;
+    console.log(leId);
+    elUsuario.update({ _id: leId }, { $set: params }, (err, res) => {
+        if (err)
+            return result.status(500).send({ message: 'Internal Server error, User doesn´t saved' });
+        if (res)
+            result.status(200).send({ client: res });
+        else
+            result.status(404).send({ message: 'Usuario not saved!' });
     });
 });
 //# sourceMappingURL=UserController.js.map

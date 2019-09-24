@@ -10,18 +10,16 @@ const UserSchema = Schema({
     lastname: String,
     email: String,
     password: String,
-    role: Number,
+    role: String,
     userIA: Boolean,
-    remoteDays: {
         monday: Boolean,
         tuesday: Boolean,
         wednesday: Boolean,
         thursday: Boolean,
-        friday: Boolean
-    },
+        friday: Boolean,
+
     last_partner: this,
-    last_day: Number,
-    report: Report
+    last_day: Number
 });
 
 module.exports = mongoose.model('User', UserSchema);
