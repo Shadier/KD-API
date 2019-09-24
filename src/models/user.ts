@@ -11,14 +11,14 @@ const UserSchema = Schema({
     email: String,
     password: String,
     role: String,
+    status:Boolean,
     userIA: Boolean,
-        monday: Boolean,
-        tuesday: Boolean,
-        wednesday: Boolean,
-        thursday: Boolean,
-        friday: Boolean,
-
-    last_partner: this,
+    monday: Boolean,
+    tuesday: Boolean,
+    wednesday: Boolean,
+    thursday: Boolean,
+    friday: Boolean,
+    last_partner: String,
     last_day: Number
 });
 
