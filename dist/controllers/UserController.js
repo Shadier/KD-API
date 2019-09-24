@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const elUsuario = require('../models/user');
+const theUser = require('../models/user');
 exports.userRouter = express_1.Router();
 exports.userRouter.get('/', (req, res) => {
-    elUsuario.find((err, users) => {
+    theUser.find((err, users) => {
         if (err)
             return res.status(500).send({ message: 'Internal Server error' });
         if (!users)
@@ -15,7 +15,7 @@ exports.userRouter.get('/', (req, res) => {
 exports.userRouter.get('/:id', (req, res) => {
     const userId = req.params.id;
     if (req.params.id != null) {
-        elUsuario.findById(userId, (err, user) => {
+        theUser.findById(userId, (err, user) => {
             if (err)
                 return res.status(500).send({ message: 'Internal Server error' });
             if (!user)
@@ -26,7 +26,7 @@ exports.userRouter.get('/:id', (req, res) => {
 });
 exports.userRouter.post('/create', (req, res) => {
     const params = req.body;
-    let usuario = new elUsuario();
+    let usuario = new theUser();
     let idpartner = params.last_partner;
     usuario.name = params.name;
     usuario.lastname = params.lastname;
@@ -34,11 +34,15 @@ exports.userRouter.post('/create', (req, res) => {
     usuario.password = params.password;
     usuario.role = params.role;
     usuario.userIA = params.userIA;
+    usuario.monday = params.monday;
+    usuario.tuesday = params.tuesday;
+    usuario.wednesday = params.wednesday;
+    usuario.thursday = params.thursday;
+    usuario.friday = params.friday;
     usuario.remoteDays = params.remoteDays;
     usuario.last_day = params.last_day;
     usuario.report = params.report;
-    //usuario.last_partner=params.last_partner;
-    elUsuario.findById(idpartner, (err, result) => {
+    theUser.findById(idpartner, (err, result) => {
         console.log(result);
         if (err)
             return res.status(500).send({ message: 'Error interno' });
@@ -62,7 +66,7 @@ exports.userRouter.patch('/update', (req, result) => {
     const params = req.body;
     const leId = params.id;
     console.log(leId);
-    elUsuario.update({ _id: leId }, { $set: params }, (err, res) => {
+    theUser.update({ _id: leId }, { $set: params }, (err, res) => {
         if (err)
             return result.status(500).send({ message: 'Internal Server error, User doesn´t saved' });
         if (res)
