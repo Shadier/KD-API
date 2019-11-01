@@ -6,7 +6,7 @@ const nodemailer = require('nodemailer');
 const ical = require('ical-generator');
 let infoEvent;
 let emailError = [];
-const emailContent = "<h1>Kitchen Dutty Event </h1><h2>Saludos desde RH</h2><p>Por favor acepta esta invitacion a tu calendario, cualquier duda o comentario enviar correo a Recursos Humanos</p>"
+const emailContent = "<div style='background-color: #F7F7FF;'><h2><span style='color: #0087ff;'>Kitchen Duty Event</span></h2><p><span style='color: #808080;'>Saludos desde RH, </span><br/><br/><span style='color: #808080;'>Por favor acepta esta invitacion a tu calendario de la siguiente manera:</span></p><h3><strong>Desde Aplicacion 'Outlook Desktop'</strong></h3><ol> <li><span style='color: #666;'>Doble Clic en el archivo '<em>event.ics</em>'</span></li><li><span style='color: #666;'>A&ntilde;adir evento al Calendario Aceptar.</span></li><li><span style='color: #666;'>En la siguiente pantalla asegurate de cambiar el Reminder a al menos 5 minutos.</span></li><li><span style='color: #666;'>Click en 'Guardar y Cerrar'/'Save and Close'</span></li></ol><h3><strong>Desde 'Outlook Web'</strong></h3><ol> <li><span style='color: #666;'>Clic en el icono parecido a un calendario con una suma del&nbsp; archivo '<em>event.ics</em>' para a&ntilde;adir automaticamente el evento a tu calendario</span></li><li><span style='color: #666;'>Click en la flecha hacia abajo. Desplegara 3 opciones</span></li><li><span style='color: #666;'>Seleccionar Agregar al Calendario</span></li></ol><p><span style='color: #666;'>Cualquier duda o comentario enviar correo a Recursos Humanos</span></p></div>"
 
 entrada.post('/', (req, res) => {
     const events = req.body;
@@ -51,10 +51,10 @@ function changeInfoEvent(event) {
     return infoEvent = {
         start: event.start,
         end: event.end,
-        summary: "KitchenDuty Event",
-        description: emailContent,
+        summary: "Kitchen Duty",
+        description: "",//emailContent,
         location: "Kitchen",
-        from: "KitchenDuty@sciodev.com",
+        from: "KitchenDutyNoReply@sciodev.com",
         to: {
             required: event.title //Destinatario
         },
@@ -86,7 +86,7 @@ async function sendEmail(infoEvent) {
         }
     })
     transporter.sendMail(createCalenderEVent(infoEvent), (err, info) => {
-        return err ? emailError.push(infoEvent.to.required) : console.log(info);
+        return err ? emailError.push(infoEvent.to.required) : console.log("All Sent ");
     })
 
 
